@@ -1,0 +1,36 @@
+name: Verify tap
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tap-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: macos-15-intel
+    timeout-minutes: 15
+    env:
+      HOMEBREW_NO_ANALYTICS: '1'
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+      HOMEBREW_DEVELOPER: '1'
+      HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Register the checkout as the tap
+        run: |
+          hyper_chamber_tap_dir="$(brew --repository)/Library/Taps/squid-quarters/homebrew-tap"
+          mkdir -p "$(dirname "$hyper_chamber_tap_dir")"
+          test ! -e "$hyper_chamber_tap_dir"
+          test ! -L "$hyper_chamber_tap_dir"
+          ln -s "$GITHUB_WORKSPACE" "$hyper_chamber_tap_dir"
+          brew trust --cask squid-quarters/tap/hyper-chamber@beta
+      - run: make audit-online
