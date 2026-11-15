@@ -32,5 +32,6 @@ jobs:
           test ! -e "$hyper_chamber_tap_dir"
           test ! -L "$hyper_chamber_tap_dir"
           ln -s "$GITHUB_WORKSPACE" "$hyper_chamber_tap_dir"
+          brew trust --cask squid-quarters/tap/hyper-chamber
           brew trust --cask squid-quarters/tap/hyper-chamber@beta
       - run: make audit-online
