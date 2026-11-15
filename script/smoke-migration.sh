@@ -19,7 +19,7 @@ stable_cask=squid-quarters/tap/hyper-chamber
 beta_cask=squid-quarters/tap/hyper-chamber@beta
 data_dir="$HOME/Library/Application Support/com.squidquarters.hyperchamber"
 for cask in "$stable_cask" "$beta_cask"; do
-  if brew list --cask --versions "$cask" >/dev/null 2>&1; then
+  if brew list --cask --versions "${cask##*/}" >/dev/null 2>&1; then
     printf 'Refusing to replace an existing cask installation: %s\n' "$cask" >&2
     exit 1
   fi
@@ -37,7 +37,7 @@ cleanup() {
   trap - EXIT
   set +e
   for cask in "$stable_cask" "$beta_cask"; do
-    if brew list --cask --versions "$cask" >/dev/null 2>&1; then
+    if brew list --cask --versions "${cask##*/}" >/dev/null 2>&1; then
       brew uninstall --cask "$cask" || result=1
     fi
   done

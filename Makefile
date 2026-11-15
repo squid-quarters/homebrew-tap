@@ -3,7 +3,8 @@ CASK_FILES := Casks/hyper-chamber.rb Casks/hyper-chamber@beta.rb
 
 .PHONY: check audit-online
 check:
-	bash -n script/smoke-migration.sh
+	bash -n script/smoke-migration.sh script/test-migration-guard.sh
+	bash script/test-migration-guard.sh
 	ruby -c Casks/hyper-chamber.rb
 	ruby -c Casks/hyper-chamber@beta.rb
 	brew style $(CASK_FILES)
