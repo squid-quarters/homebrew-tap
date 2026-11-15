@@ -23,6 +23,7 @@ cask "hyper-chamber@beta" do
     end
   end
 
+  conflicts_with cask: "hyper-chamber"
   depends_on macos: :ventura
 
   app "Hyper Chamber.app"
