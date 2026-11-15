@@ -45,4 +45,6 @@ All cask changes go through a pull request. Keep each version tied to a publishe
 
 Run `make check` for Ruby syntax, Homebrew style and an offline audit of both casks. These checks load the fully qualified casks, so this checkout must be registered as `squid-quarters/tap` in Homebrew; CI registers its checkout automatically. `make audit-online` additionally checks the published URLs, metadata and application minimum macOS version. Gatekeeper/notarization acceptance is separate: this third-party tap is not a submission to Homebrew’s official cask repository.
 
+CI also installs the beta into an isolated application folder, removes it, then installs and removes stable 1.0.0 on Apple Silicon and Intel runners. It verifies the application version, identifier, architecture, signature and quarantine, and checks that settings and a sample SQLite library survive both removals. This test never launches the application; its owned test data is cleaned up afterward.
+
 The stable cask follows the latest published stable release. The prerelease audit allowlist applies only to the explicitly named beta cask, whose livecheck selects published, non-draft beta releases. The app has no in-app automatic updater; Homebrew upgrades replace the app bundle independently of your library.
